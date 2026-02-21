@@ -1,0 +1,52 @@
+[
+  {
+    "id": 4,
+    "user_id": "9ab3c3f2-f597-4923-b152-f2a8259ebc3b",
+    "full_name": "Argenis Torrealba",
+    "ci": "V-00000000",
+    "phone": "04120814879",
+    "role": "superadmin",
+    "created_at": "2025-11-14T03:29:22.212137",
+    "email": "kurtcobain272829@gmail.com"
+  },
+  {
+    "id": 8,
+    "user_id": "6c4c8050-adf7-4454-90d3-8f0bd48f4871",
+    "full_name": "Genderson Sevilla",
+    "ci": "29555666",
+    "phone": "32132312",
+    "role": "admin",
+    "created_at": "2025-11-14T04:01:17.064",
+    "email": "gendersonsevilla54@gmail.com"
+  },
+  {
+    "id": 9,
+    "user_id": "6ee22959-a7db-41fc-8204-2dd86b2572e0",
+    "full_name": "Random01",
+    "ci": "12312312",
+    "phone": "12312321",
+    "role": "admin",
+    "created_at": "2025-11-15T02:34:39.299",
+    "email": "prueba01@gmail.com"
+  },
+  {
+    "id": 7,
+    "user_id": "28828753-9da1-48ef-be1a-b589bece1914",
+    "full_name": "Adrienne Rangel",
+    "ci": "00000000",
+    "phone": "04243165862",
+    "role": "superadmin",
+    "created_at": "2025-11-14T03:59:54.545",
+    "email": "unergpasantias2.0@gmail.com"
+  },
+  {
+    "id": 11,
+    "user_id": "755fb826-8440-4fe6-bb1b-4ac21ae4235d",
+    "full_name": "Prueba02",
+    "ci": "2321321321",
+    "phone": "222222222",
+    "role": "admin",
+    "created_at": "2025-11-18T01:47:03.591",
+    "email": "prueba02@gmail.com"
+  }
+]

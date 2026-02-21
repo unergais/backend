@@ -1,0 +1,12 @@
+entrar a cd backend y luego ejecutar
+node scripts/backupData.js
+
+para el restoreData.js:
+Ve a la terminal en backend.
+Ejecuta: node scripts/restoreData.js
+El sistema te mostrará una lista de tus backups y te preguntará cuál quieres restaurar.
+Importante: Este script restaura los datos "encima" de los actuales (Upsert). Es decir, si el estudiante X tenía nota 20 hoy, y lo restauras al backup de ayer donde tenía 10, volverá a tener 10.
+
+Ahora sí, tienes Backup de Código (ZIP) y Backup/Restauración de Datos (Scripts) funcionales sin pagar membresías.
+
+¿Listo para volver al código y mejorar PrivateRoute como sugerí en la auditoría?
