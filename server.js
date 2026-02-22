@@ -11,6 +11,7 @@ import { processGrade } from './utils/gradeUtils.js'
 
 dotenv.config()
 const app = express()
+const port = process.env.PORT || 4000
 app.use(cors())
 app.use(express.json())
 
@@ -69,6 +70,43 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
+
+// =============================================
+// HEALTH CHECK - Diagnóstico rápido del deploy
+// =============================================
+
+/**
+ * GET /
+ * Ruta raíz para verificar que el servidor está corriendo.
+ */
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'UNERG Pasantías Backend is running',
+    port: port,
+    timestamp: new Date().toISOString()
+  })
+})
+
+/**
+ * GET /health
+ * Health check con diagnóstico de variables de entorno.
+ */
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    nodeVersion: process.version,
+    env: {
+      PORT: process.env.PORT ? '✅ configured' : '❌ missing',
+      SUPABASE_URL: process.env.SUPABASE_URL ? '✅ configured' : '❌ missing',
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅ configured' : '❌ missing',
+      GMAIL_USER: process.env.GMAIL_USER ? '✅ configured' : '❌ missing',
+      GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? '✅ configured' : '❌ missing'
+    },
+    timestamp: new Date().toISOString()
+  })
+})
 
 // =============================================
 // RUTAS DE VERIFICACIÓN
@@ -876,5 +914,4 @@ app.put('/api/toggle-user-status', async (req, res) => {
 // =============================================
 // INICIAR SERVIDOR
 // =============================================
-const port = process.env.PORT || 4000
-app.listen(port, () => console.log(`Server listening on port ${port}`))
+app.listen(port, '0.0.0.0', () => console.log(`Server listening on port ${port}`))

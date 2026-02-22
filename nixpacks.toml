@@ -1,0 +1,8 @@
+# Configuración de Nixpacks para el despliegue en Dokploy
+# Usa Node.js 20 para compatibilidad con @supabase/supabase-js >= 2.89.0
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "npm-9_x"]
+
+[start]
+cmd = "npm run start"
