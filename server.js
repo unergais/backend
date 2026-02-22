@@ -12,7 +12,11 @@ import { processGrade } from './utils/gradeUtils.js'
 dotenv.config()
 const app = express()
 const port = process.env.PORT || 4000
-app.use(cors())
+app.use(cors({
+  origin: '*', // En producción deberías poner tu dominio específico
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 app.use(express.json())
 
 // =============================================
@@ -122,7 +126,7 @@ app.use('/api', authRoutes)
  * POST /api/create-admin
  * Crea un nuevo admin/superadmin.
  */
-app.post('/api/create-admin', async (req, res) => {
+app.post('/api/create-admin', verifyToken, async (req, res) => {
   try {
     const { email, password, full_name, ci, phone, role } = req.body
 
@@ -170,7 +174,7 @@ app.post('/api/create-admin', async (req, res) => {
  * DELETE /api/delete-admin
  * Elimina un admin/superadmin.
  */
-app.delete('/api/delete-admin', async (req, res) => {
+app.delete('/api/delete-admin', verifyToken, async (req, res) => {
   try {
     const { profileId, authUserId } = req.body
     if (!profileId || !authUserId) return res.status(400).json({ error: 'Faltan datos' })
@@ -196,7 +200,7 @@ app.delete('/api/delete-admin', async (req, res) => {
  * PUT /api/update-admin
  * Actualiza los datos de un admin.
  */
-app.put('/api/update-admin', async (req, res) => {
+app.put('/api/update-admin', verifyToken, async (req, res) => {
   try {
     const { id, full_name, ci, phone, email, role } = req.body
     if (!id) return res.status(400).json({ error: 'Falta el id' })
@@ -224,7 +228,7 @@ app.put('/api/update-admin', async (req, res) => {
  * DELETE /api/delete-student
  * Elimina a un estudiante por completo.
  */
-app.delete('/api/delete-student', async (req, res) => {
+app.delete('/api/delete-student', verifyToken, async (req, res) => {
   try {
     const { profileId, authUserId } = req.body
     if (!profileId || !authUserId) return res.status(400).json({ error: 'Faltan datos' })
@@ -256,12 +260,9 @@ app.delete('/api/delete-student', async (req, res) => {
 
 /**
  * POST /api/grade-submission
- * Califica una entrega: Actualiza/crea la nota en 'student_evaluations' y marca la entrega como 'approved'.
- * ESCALA: 0-10 (notas con .5 se redondean automáticamente hacia arriba)
- * 
- * NUEVO: Usa evaluationId en lugar de evaColumn (eva1, eva2, etc.)
+ * Califica una entrega
  */
-app.post('/api/grade-submission', async (req, res) => {
+app.post('/api/grade-submission', verifyToken, async (req, res) => {
   try {
     const { submissionId, studentId, evaluationId, grade, observaciones } = req.body
 
@@ -426,14 +427,9 @@ app.post('/api/reject-submission', async (req, res) => {
 
 /**
  * POST /api/calculate-totals
- * NUEVO: Calcula la nota final usando student_evaluations con porcentajes de evaluations_config
- * Fórmula: SUM(nota * porcentaje / 10) donde nota está en escala 0-10
- * Se aplica a todos los estudiantes de una cohorte específica (o todos si es 'all').
- * 
- * REDONDEO: Notas finales con decimal >= 0.5 se redondean hacia arriba
- * Ejemplo: 7.5 → 8, 7.4 → 7, 8.9 → 9
+ * Calcula la nota final
  */
-app.post('/api/calculate-totals', async (req, res) => {
+app.post('/api/calculate-totals', verifyToken, async (req, res) => {
   try {
     const { cohorte } = req.body // ej: "2025-1" o "all"
 
@@ -676,9 +672,8 @@ app.get('/api/check-deadline/:studentId/:evaluationId', async (req, res) => {
 /**
  * POST /api/submit-evaluation
  * Endpoint protegido para que estudiantes envíen entregas.
- * Valida la fecha límite ANTES de aceptar la entrega.
  */
-app.post('/api/submit-evaluation', async (req, res) => {
+app.post('/api/submit-evaluation', verifyToken, async (req, res) => {
   try {
     const { studentId, evaluationId, fileUrl, fileName, fileType, fileSize } = req.body
 
@@ -793,7 +788,7 @@ app.post('/api/submit-evaluation', async (req, res) => {
  * POST /api/grant-extension
  * Permite al Admin otorgar una prórroga individual a un estudiante.
  */
-app.post('/api/grant-extension', async (req, res) => {
+app.post('/api/grant-extension', verifyToken, async (req, res) => {
   try {
     const { studentId, evaluationId, newDeadline } = req.body
 
@@ -848,9 +843,8 @@ app.post('/api/grant-extension', async (req, res) => {
 /**
  * PUT /api/toggle-student-status
  * Cambia el estado de habilitación de un estudiante.
- * Body: { studentId: string, habilitado: boolean }
  */
-app.put('/api/toggle-student-status', async (req, res) => {
+app.put('/api/toggle-student-status', verifyToken, async (req, res) => {
   try {
     const { studentId, habilitado } = req.body
 
@@ -881,9 +875,8 @@ app.put('/api/toggle-student-status', async (req, res) => {
 /**
  * PUT /api/toggle-user-status
  * Cambia el estado de habilitación de un usuario (admin/superadmin).
- * Body: { userId: string, habilitado: boolean }
  */
-app.put('/api/toggle-user-status', async (req, res) => {
+app.put('/api/toggle-user-status', verifyToken, async (req, res) => {
   try {
     const { userId, habilitado } = req.body
 
