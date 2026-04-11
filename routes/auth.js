@@ -29,7 +29,7 @@ router.post('/forgot-password', async (req, res) => {
       type: 'recovery',
       email: email,
       options: {
-        redirectTo: redirectTo || process.env.FRONTEND_URL || 'http://localhost:5173/reset-password'
+        redirectTo: redirectTo || process.env.FRONTEND_URL + '/reset-password'
       }
     });
 
