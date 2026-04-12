@@ -13,7 +13,7 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 4000
 app.use(cors({
-  origin: '*', // En producción deberías poner tu dominio específico
+  origin: process.env.FRONTEND_URL || 'https://sisgepais.grasa.engineer', // En producción deberías poner tu dominio específico o variable
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }))
@@ -105,8 +105,8 @@ app.get('/health', (req, res) => {
       PORT: process.env.PORT ? '✅ configured' : '❌ missing',
       SUPABASE_URL: process.env.SUPABASE_URL ? '✅ configured' : '❌ missing',
       SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅ configured' : '❌ missing',
-      GMAIL_USER: process.env.GMAIL_USER ? '✅ configured' : '❌ missing',
-      GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? '✅ configured' : '❌ missing'
+      SMTP_HOST: process.env.SMTP_HOST ? '✅ configured' : '❌ missing',
+      SMTP_USER: process.env.SMTP_USER ? '✅ configured' : '❌ missing'
     },
     timestamp: new Date().toISOString()
   })

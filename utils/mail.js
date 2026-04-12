@@ -3,12 +3,13 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 dotenv.config()
 
-// Configura el transporter de nodemailer usando Gmail (App Password o OAuth2 según prefieras)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
 })
 
@@ -20,7 +21,7 @@ const transporter = nodemailer.createTransport({
  */
 export async function sendVerificationEmail(to, code) {
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: process.env.SMTP_FROM,
     to,
     subject: 'Código de verificación - Pasantías UNERG',
     text: `Tu código de verificación es: ${code}. Expira en 15 minutos.`,
@@ -48,7 +49,7 @@ export async function sendVerificationEmail(to, code) {
  */
 export async function sendPasswordResetEmail(to, resetLink) {
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: process.env.SMTP_FROM,
     to,
     subject: 'Recuperación de contraseña - Pasantías UNERG',
     text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: ${resetLink}. Si no solicitaste esto, ignora este correo.`,
